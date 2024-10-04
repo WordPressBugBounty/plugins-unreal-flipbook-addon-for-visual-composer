@@ -1,0 +1,8 @@
+.vc-3d-flip-book-icon {
+  background-image: url('../images/icon.png');
+  background-size: contain;
+}
+
+.vc_properties-list .mount-node input[type="radio"] {
+  width: auto;
+}
