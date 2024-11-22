@@ -19,7 +19,7 @@
       $fb3d['dictionary'][$keys[$i]] = $values[$i];
     }
   }
-  add_action('plugins_loaded', '\iberezansky\fb3d\load_textdomain');
+  add_action('init', '\iberezansky\fb3d\load_textdomain');
 
   function load_dictionary() {
     return array(
