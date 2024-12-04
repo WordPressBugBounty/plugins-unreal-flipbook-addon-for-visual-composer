@@ -322,7 +322,8 @@
       __('Trigger', POST_ID),
       __('coma separated CSS classes of any elements that can launch lightbox', POST_ID),
       __('open book on page', POST_ID),
-      __('stretch source images / pdf pages / htmls on book pages', POST_ID)
+      __('stretch source images / pdf pages / htmls on book pages', POST_ID),
+      __('Item is not found', POST_ID)
     );
   }
 ?>
