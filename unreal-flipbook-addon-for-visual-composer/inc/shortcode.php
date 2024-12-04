@@ -191,7 +191,7 @@
             });
           }
           function fb3dClientScriptsLoader() {
-            if(window.jQuery) {
+            if(window.jQuery && typeof window.jQuery.get==='function') {
               var isStable = !Promise.withResolvers || /^((?!chrome|android).)*safari/i.test(navigator.userAgent), pdfJs = PDFJS_LOCALE;
               window.PDFJS_LOCALE={pdfJsCMapUrl: pdfJs.pdfJsCMapUrl, pdfJsWorker: isStable? pdfJs.stablePdfJsWorker: pdfJs.pdfJsWorker};
               Promise.all([
