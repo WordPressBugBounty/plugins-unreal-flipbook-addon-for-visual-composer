@@ -163,14 +163,20 @@
     return $d;
   }
 
+  function reset_client_scripts_loaded() {
+    global $fb3d;
+    $fb3d['client_scripts_loaded'] = false;
+  }
+
+  add_action('wp_head', '\iberezansky\fb3d\reset_client_scripts_loaded', 1000);
+
   function client_locale_loader() {
     global $fb3d;
     $out = '';
-    if(!isset($fb3d['client_scripts_loaded'])) {
-      $fb3d['client_scripts_loaded'] = TRUE;
+    if(!$fb3d['client_scripts_loaded']) {
+      $fb3d['client_scripts_loaded'] = true;
       wp_enqueue_script('jquery');
       update_templates_cache();
-      get_client_dictionary();
       ob_start();
       ?>
       <script type="text/javascript">
@@ -187,11 +193,11 @@
           ])) ?>;
           function fb3dFetch(url) {
             return new Promise(function(resolve, reject) {
-              jQuery.get(url, resolve).fail(reject);
+              jQuery.ajax({url: url, dataType: 'text'}).done(resolve).fail(reject);
             });
           }
           function fb3dClientScriptsLoader() {
-            if(window.jQuery && typeof window.jQuery.get==='function') {
+            if(window.jQuery && typeof jQuery.ajax==='function') {
               var isStable = !Promise.withResolvers || /^((?!chrome|android).)*safari/i.test(navigator.userAgent), pdfJs = PDFJS_LOCALE;
               window.PDFJS_LOCALE={pdfJsCMapUrl: pdfJs.pdfJsCMapUrl, pdfJsWorker: isStable? pdfJs.stablePdfJsWorker: pdfJs.pdfJsWorker};
               Promise.all([
