@@ -5,7 +5,7 @@ Tags: pdf viewer, flipbook, flip book, pdf flipbook, WPBakery extension
 Requires at least: 4.3
 Tested up to: 6.7
 Requires PHP: 5.3
-Stable tag: 1.16.12
+Stable tag: 1.16.13
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -241,6 +241,13 @@ Read <a href="http://3dflipbook.net/vc-user-manual">the user manual</a>.
 17. Tilted unrolling flipping pages & flexible corners
 
 == Changelog ==
+
+<h4>1.16.13</h4>
+<ul>
+  <li>
+    Fixed fullScreen background urls
+  </li>
+</ul>
 
 <h4>1.16.12</h4>
 <ul>

@@ -24,7 +24,7 @@ function fb3dClientLocaleLoader() {
         fb3dFetch(assetsJs+'html2canvas.min.js?ver=0.5'),
         fb3dFetch(assetsJs+'client.min.js?ver='+FB3D_CLIENT_LOCALE.version),
       ]).then(function(fs) {
-        jQuery('head').append(['<style type="text/css">', fs[0], '</style>'].join(''));
+        jQuery('head').append(['<style type="text/css">', fs[0].replace(/url\('..\//gi, 'url(\''+FB3D_CLIENT_LOCALE.pluginurl+'assets/'), '</style>'].join(''));
         for(var i = 1; i<fs.length; ++i) {
           eval(fs[i]);
         }
