@@ -18,7 +18,7 @@ function fb3dClientLocaleLoader() {
       };
       Promise.all([
         fb3dFetch(FB3D_CLIENT_LOCALE.pluginurl+'assets/css/client.css?ver='+FB3D_CLIENT_LOCALE.version),
-        fb3dFetch(assetsJs+'skins-cache.js?ver='+FB3D_CLIENT_LOCALE.version),
+        fb3dFetch(FB3D_CLIENT_LOCALE.cacheurl+'skins.js?ver='+FB3D_CLIENT_LOCALE.version),
         fb3dFetch(isStable? pdfJs.stablePdfJsLib: pdfJs.pdfJsLib),
         fb3dFetch(assetsJs+'three.min.js?ver=125'),
         fb3dFetch(assetsJs+'html2canvas.min.js?ver=0.5'),

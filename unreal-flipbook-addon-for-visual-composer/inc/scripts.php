@@ -115,6 +115,7 @@
       'jsData'=> $fb3d['jsData'],
       'key'=> POST_ID,
       'pdfJS'=> get_pdf_js_locale(),
+      'cacheurl'=> get_cache_url(),
       'pluginsurl'=> substr(URL, 0, strpos(URL, '/plugins/')+9),
       'pluginurl'=> URL,
       'thumbnailSize'=> $thumbnailSize,
