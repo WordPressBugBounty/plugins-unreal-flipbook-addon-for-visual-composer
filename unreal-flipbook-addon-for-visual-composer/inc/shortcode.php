@@ -219,14 +219,67 @@
         $init = '';
       }
 
-      $r = sprintf('<%s id="%s" class="%s %s"', $is_link? 'a': 'div', $id, '_'.POST_ID, to_single_quotes($classes));
+      $r = sprintf('<%s id="%s" class="%s %s"', $is_link? 'a': 'div', $id, '_'.POST_ID, esc_attr($classes));
+      $id = 'fb3d-'.rand();
+      if(isset($_GET['vc_editable'])) {
+        ob_start();
+        ?>
+        <style type="text/css">
+          .pseudo-thumbnail {
+            width: 150px;
+            height: 150px;
+            display: inline-block;
+            background-color: #f8f8f8;
+            background-image: url('<?php echo(ASSETS_IMAGES.'pseudo-thumbnail.png')?>');
+            position: relative;
+          }
+          .pseudo-thumbnail::after {
+            content: 'Thumbnail';
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            font-size: 14px;
+            transform: translate(-50%, -50%);
+            color: #2c4c7e;
+          }
+          .pseudo-3d-flip-book {
+            background-color: #f8f8f8;
+            height: 100%;
+            width: 100%;
+            background-image: url('<?php echo(ASSETS_IMAGES.'pseudo-3d-flip-book.png')?>');
+            background-repeat: round;
+            position: relative;
+          }
+          .pseudo-3d-flip-book::after {
+            content: 'Fullscreen';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            font-size: 20px;
+            transform: translate(-50%, -50%);
+            color: #2c4c7e;
+          }
+        </style>
+        <script src="<?php echo(ASSETS_JS.'vc-init-preview.js')?>"></script>
+        <script type="text/javascript">
+          fb3d.ajaxurl = '<?php echo(admin_url('admin-ajax.php')) ?>'
+          fb3d.initVCPreview('<?php echo($id)?>');
+        </script>
+        <?php
+        $init = ob_get_clean();
+      }
+      else {
+        $init = '';
+      }
+
+      $r = sprintf('<%s id="%s" class="%s %s"', $is_link? 'a': 'div', $id, '_'.POST_ID, esc_attr($classes));
       foreach($atts as $k=> $v) {
         if($k!=='classes' && $k!=='style' && $k!=='query') {
-          $r .= sprintf(' data-%s="%s"', $k, to_single_quotes($v));
+          $r .= sprintf(' data-%s="%s"', $k, esc_attr($v));
         }
       }
       if($atts['style']!=='') {
-        $r .= sprintf(' style="%s"', to_single_quotes($atts['style']));
+        $r .= sprintf(' style="%s"', esc_attr($atts['style']));
       }
       $r.='>';
 
@@ -254,7 +307,7 @@
   		unset($params['tax']);
       unset($params['style']);
       ob_start();
-  		echo('<table class="fb3d-categories" data-query="'.to_single_quotes(json_encode($q_params)).'" data-raw-query="'.to_single_quotes($atts['query']).'" style="'.to_single_quotes($atts['style']).'"><tr>');
+  		echo('<table class="fb3d-categories" data-query="'.esc_attr(to_single_quotes(json_encode($q_params))).'" data-raw-query="'.esc_attr(to_single_quotes($atts['query'])).'" style="'.esc_attr($atts['style']).'"><tr>');
   		for($i=0; $i<$q->post_count; ++$i) {
   			if($i%$cols===0 && $i) {
   				echo('</tr><tr>');
