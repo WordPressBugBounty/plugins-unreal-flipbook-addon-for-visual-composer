@@ -44,7 +44,12 @@
   add_action('wp_ajax_fb3d_send_taxonomy_terms', '\iberezansky\fb3d\send_taxonomy_terms_json');
 
   function send_posts_json() {
-    $q = new WP_Query(array('post_type'=> POST_ID, 'posts_per_page'=>-1));
+    global $fb3d;
+    $rq = ['post_type'=> POST_ID, 'posts_per_page'=>-1];
+    if(get_current_user_level()<$fb3d['user_levels']['editor']) {
+      $rq['post_status'] = 'publish';
+    }
+    $q = new WP_Query($rq);
     $r = array();
     for($i=0; $i<$q->post_count; ++$i) {
       array_push($r, post_to_user_post($q->posts[$i], false));
