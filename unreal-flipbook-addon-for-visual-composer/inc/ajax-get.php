@@ -10,6 +10,25 @@
     }
   }
 
+  function filter_denied_posts($ids) {
+    global $fb3d, $wpdb;
+    if(get_current_user_level()<$fb3d['user_levels']['editor']) {
+      $posts = $wpdb->get_results("
+        SELECT ID
+        FROM ".$wpdb->prefix.'posts'."
+        WHERE post_type='".POST_ID."' AND ID IN ".a_to_sql_list($ids)." AND (post_status='publish' AND post_password='' OR post_author=".get_current_user_id().")
+      ", ARRAY_A);
+      $ids = [];
+      foreach($posts as $post) {
+        array_push($ids, (int)$post['ID']);
+      }
+      if(!count($ids)) {
+        array_push($ids, -1);
+      }
+    }
+    return $ids;
+  }
+
   function post_to_user_post($post, $isMeta) {
     if($isMeta) {
       $meta = get_post_meta($post->ID);
@@ -122,7 +141,7 @@
   add_action('wp_ajax_nopriv_fb3d_send_post', '\iberezansky\fb3d\send_post_json');
 
   function client_posts_in($ids_mis, $ids) {
-    $ids = array_merge($ids_mis, $ids);
+    $ids = filter_denied_posts(array_merge($ids_mis, $ids));
     $posts = [];
     if(count($ids)) {
       $q = new WP_Query(array('post_type'=> POST_ID, 'post__in'=> $ids, 'posts_per_page'=>-1));
@@ -148,7 +167,8 @@
   add_action('wp_ajax_nopriv_fb3d_send_posts_in', '\iberezansky\fb3d\send_posts_in_json');
 
   function client_post_pages($id) {
-    $id = intval($id);
+    $ids = filter_denied_posts([intval($id)]);
+    $id = $ids[0];
     $pages = NULL;
     if($id) {
       $pages = select_post_pages_by_page_post_ID($id);
@@ -165,7 +185,7 @@
   add_action('wp_ajax_nopriv_fb3d_send_post_pages', '\iberezansky\fb3d\send_post_pages_json');
 
   function client_posts_in_pages($ids) {
-    return select_post_pages_by_page_posts_IDs_in($ids);
+    return select_post_pages_by_page_posts_IDs_in(filter_denied_posts($ids));
   }
 
   function send_posts_in_pages_json() {
@@ -177,7 +197,7 @@
   add_action('wp_ajax_nopriv_fb3d_send_posts_in_pages', '\iberezansky\fb3d\send_posts_in_pages_json');
 
   function client_posts_in_first_page($ids) {
-    return select_post_first_page_by_page_post_IDs_in($ids);
+    return select_post_first_page_by_page_post_IDs_in(filter_denied_posts($ids));
   }
 
   function send_posts_in_first_page_json() {
@@ -190,7 +210,8 @@
 
   function client_post_first_page($id) {
     $page = NULL;
-    $id = intval($id);
+    $ids = filter_denied_posts([intval($id)]);
+    $id = $ids[0];
     if($id) {
       $page = select_post_first_page_by_page_post_ID($id);
     }
@@ -198,7 +219,7 @@
   }
 
   function send_post_first_page_json() {
-    $page = client_post_first_page($id);
+    $page = client_post_first_page($_GET['id']);
     wp_send_json(['code'=> $page!==NULL? CODE_OK: CODE_ERROR, 'page'=> $page]);
   }
 
