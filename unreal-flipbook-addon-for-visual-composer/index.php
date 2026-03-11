@@ -5,12 +5,13 @@
     Description: Unreal FlipBook Addon for WPBakery WordPress Plugin <a href="http://3dflipbook.net/download-vc"><strong>Go Pro</strong></a>
     Author: iberezansky
     Author URI: http://3dflipbook.net/
-    Version: 1.16.18
+    Version: 1.16.19
     License: GPLv2 or later
 
     Text Domain: 3d-flip-book
   */
   namespace iberezansky\fb3d;
+  defined('ABSPATH') || die();
 
   function get_dump($var) {
     ob_start();
@@ -82,7 +83,7 @@
     fetch_options();
   }
 
-  define('iberezansky\fb3d\VERSION', '1.16.18');
+  define('iberezansky\fb3d\VERSION', '1.16.19');
   define('iberezansky\fb3d\DBVERSION', '1.1');
   define('iberezansky\fb3d\SKINVERSION', '1.0');
   define('iberezansky\fb3d\DTM_FORMAT', 'Y-m-d H:i:s');
