@@ -119,7 +119,7 @@
   function client_post($id, $thumbnailUrl) {
     $post = NULL;
     $id = intval($id);
-    if($id) {
+    if($id>0) {
       $q = new WP_Query(['post_type'=> POST_ID, 'p'=> $id]);
       if($q->post_count) {
         $post = post_to_user_post($q->posts[0], true);
@@ -134,7 +134,8 @@
   }
 
   function send_post_json() {
-    $post = client_post($_GET['id'], aa($_GET, 'thumbnailUrl', 'false')==='true');
+    $ids = filter_denied_posts([intval($_GET['id'])]);
+    $post = client_post($ids[0], aa($_GET, 'thumbnailUrl', 'false')==='true');
     wp_send_json(['code'=> $post!==NULL? CODE_OK: CODE_NOT_FOUND, 'post'=> $post]);
   }
 
