@@ -66,13 +66,17 @@
   function send_posts_json() {
     global $fb3d;
     $rq = ['post_type'=> POST_ID, 'posts_per_page'=>-1];
-    if(get_current_user_level()<$fb3d['user_levels']['editor']) {
+    $user_level = get_current_user_level();
+    if($user_level<$fb3d['user_levels']['editor']) {
       $rq['post_status'] = 'publish';
     }
     $q = new WP_Query($rq);
     $r = array();
+    $user_id = get_current_user_id();
     for($i=0; $i<$q->post_count; ++$i) {
-      array_push($r, post_to_user_post($q->posts[$i], false));
+      if($q->posts[$i]->post_password==='' || $user_level>=$fb3d['user_levels']['editor'] || $user_id===intval($q->posts[$i]->post_author)) {
+        array_push($r, post_to_user_post($q->posts[$i], false));
+      }
     }
     wp_send_json(array('code'=> CODE_OK,'posts'=> $r));
   }
