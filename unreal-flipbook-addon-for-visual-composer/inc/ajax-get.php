@@ -98,6 +98,7 @@
       'p'=> $id,
       'post_type'=> 'attachment',
       'post_status'=> 'inherit',
+      'post_password'=> '',
       'post_mime_type'=> array(
         'image/gif',
         'image/jpeg',
@@ -112,6 +113,7 @@
       $meta = wp_get_attachment_metadata($post->ID);
       $meta['parent_url'] = substr($post->guid, 0, strrpos($post->guid, '/')+1);
       $meta['id'] = $post->ID;
+      $meta['post_parent'] = $post->post_parent;
     }
     else {
       $meta = NULL;
@@ -237,7 +239,7 @@
     $id = intval($_GET['id']);
     if($id) {
       $meta = get_media_image($id);
-      if($meta) {
+      if($meta && (!$meta['post_parent'] || current_user_can('read_post', $meta['post_parent']))) {
         $code = CODE_OK;
         wp_send_json(array('code'=> $code, 'mediaImage'=> $meta));
       }
